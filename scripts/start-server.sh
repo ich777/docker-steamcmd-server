@@ -78,7 +78,12 @@ if [ ! -z "${WS_CONTENT}" ]; then
 		touch ${SERVER_DIR}/ConanSandbox/Mods/modlist.txt
 	fi
 	echo "---Putting workshop content into modlist---"
-	find ${SERVER_DIR}/steamapps/workshop/content/ -name *.pak > ${SERVER_DIR}/ConanSandbox/Mods/modlist.txt
+	#install mods in order
+    > ${SERVER_DIR}/ConanSandbox/Mods/modlist.txt
+    for WS_ITEM in ${WS_CONTENT}; do
+    	find ${SERVER_DIR}/steamapps/workshop/content/440900/${WS_ITEM}/ -name *.pak >> ${SERVER_DIR}/ConanSandbox/Mods/modlist.txt
+    done
+
 fi
 
 echo "---Prepare Server---"
