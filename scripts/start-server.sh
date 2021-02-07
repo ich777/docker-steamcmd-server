@@ -51,4 +51,4 @@ chmod -R ${DATA_PERM} ${DATA_DIR}
 
 echo "---Start Server---"
 cd ${SERVER_DIR}
-./arma3server ${GAME_PARAMS}
+./arma3server_x64 ${GAME_PARAMS}
