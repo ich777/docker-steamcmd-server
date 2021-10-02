@@ -1,45 +1,29 @@
 # SteamCMD in Docker optimized for Unraid
-This Docker will download and install SteamCMD. It will also install Counter-Strike: Source and run it. Update Notice: Simply restart the container if a newer version of the game is available.
-
-## Env params
-| Name | Value | Example |
-| --- | --- | --- |
-| STEAMCMD_DIR | Folder for SteamCMD | /serverdata/steamcmd |
-| SERVER_DIR | Folder for gamefile | /serverdata/serverfiles |
-| GAME_ID | SteamID for server | 232330 |
-| GAME_NAME | SRCDS gamename | cstrike |
-| GAME_PARAMS | Values to start the server | -secure +maxplayers 32 +map de_dust2 |
-| UID | User Identifier | 99 |
-| GID | Group Identifier | 100 |
-| GAME_PORT | Port the server will be running on | 27015 |
-| VALIDATE | Validates the game data | true |
-| USERNAME | Leave blank for anonymous login | blank |
-| PASSWRD | Leave blank for anonymous login | blank |
-
-***ATTENTION: You have to disable Steam Guard for games that require authentication, Steam recommends to create a seperate account for dedicated servers***
-
->**NOTE** GAME_ID values can be found [here](https://developer.valvesoftware.com/wiki/Dedicated_Servers_List)
-
-> And for GAME_NAME there is no list, so a quick search should give you the result
+This Docker will download and install SteamCMD. It will also install Survive The Nights and run it. Update Notice: Simply restart the container if a newer version of the game is available.
 
 ## Run example
 ```
-docker run --name CSSource -d \
-	-p 27015:27015 -p 27015:27015/udp \
-	--env 'GAME_ID=232330' \
-	--env 'GAME_NAME=cstrike' \
-	--env 'GAME_PORT=27015' \
-	--env 'GAME_PARAMS=-secure +maxplayers 32 +map de_dust2' \
-	--env 'UID=99' \
-	--env 'GID=100' \
-	--volume /mnt/user/appdata/steamcmd:/serverdata/steamcmd \
-	--volume /mnt/user/appdata/cstrikesource:/serverdata/serverfiles \
-	ich777/steamcmd:latest
+docker run -d --restart always -p 7950-7951:7950-7951/udp -e 'GAME_ID=1502300' -e 'UID=99' -e 'GID=100' -v /path/to/steamcmd:/serverdata/steamcmd -v /path/to/survivethenights/serverfiles/:/serverdata/serverfiles --name survivethenights ich777/steamcmd:stn
 ```
->**NOTE** port 26900 is the port for vac, in case of multiple servers make sure these are not the same
+### Variables
+* **[--restart](https://docs.docker.com/engine/reference/run/#restart-policies---restart)** always | unless-stopped | on-failure[:max-retries] | no
 
+* **[-p](https://docs.docker.com/engine/reference/commandline/run/#publish-or-expose-port--p---expose)** Maps Host Port(s) to Container Port(s) [HostPorts:ContainerPorts] Don't recommend changing this value unless you know what you're doing.
 
-This Docker was mainly edited for better use with Unraid, if you don't use Unraid you should definitely try it!
+* **[-e 'GAME_ID=#######'](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file)** Set the [AppID](https://developer.valvesoftware.com/wiki/Dedicated_Servers_List) that Steamcmd will use to install/update/validate the server files. The correct AppID for Survive The Nights is 1502300.
 
+* **[-e 'UID=#######'](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file)** Changes the User used inside container. Unless you are planning to change a majority of the way things work inside the scripts, do not change this value from the default of 99.
+
+* **[-e 'GID=#######'](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file)** Changes the Group used inside container. Unless you are planning to change a majority of the way things work inside the scripts, do not change this value from the default of 100.
+
+* **[-v /path/to/host/steamcmd:/serverdata/steamcmd](https://docs.docker.com/engine/reference/commandline/run/#mount-volume--v---read-only)** Can be excluded. Maps Steamcmd itself to a real folder on the host filesystem. The benefit of doing this is that if you run multiple containers from this image, or others built from different branches in the repository, you can map them all to this folder and only have one copy of Steamcmd rather than tens, hundreds, or even thousands of copies, between all of your containers, needlessly wasting space.
+
+* **[-v /path/to/host/survivethenights/serverfiles/:/serverdata/serverfiles](https://docs.docker.com/engine/reference/commandline/run/#mount-volume--v---read-only)** Should **not** be excluded, but can be. This maps the server files that store your server information. If your container is removed, the server files will be preserved to whatever path you /path/to/host/ on the host machine so you don't lose your world. __If you restart your container, and your world is gone because you excluded this, no one here can help you recover your data.__
+
+* **[--name survivethenights](https://docs.docker.com/engine/reference/commandline/run/#assign-name-and-allocate-pseudo-tty---name--it)** Should **not** be excluded, but can be. Assigns the given name to the container. A random name will be assigned by docker if this is not provided.
+
+---
+
+This Docker was mainly edited for better use with Unraid, if you don't use Unraid you should definitely try it! This specific branch for Survive The Nights has also been tested successfully in an Archlinux environment.
 
 This Docker is forked from mattieserver, thank you for this wonderfull Docker.
