@@ -1,5 +1,7 @@
 # SteamCMD in Docker optimized for Unraid
-This Docker will download and install SteamCMD. It will also install Survive The Nights and run it. Update Notice: Simply restart the container if a newer version of the game is available.
+This Docker will download and install SteamCMD. It will also install Survive The Nights and run it. 
+
+**Update Notice:** Simply restart the container if a newer version of the game is available.
 
 ## Run example
 ```
@@ -8,7 +10,7 @@ docker run -d --restart always -p 7950-7951:7950-7951/udp -e 'GAME_ID=1502300' -
 ### Variables
 * **[--restart](https://docs.docker.com/engine/reference/run/#restart-policies---restart)** always | unless-stopped | on-failure[:max-retries] | no
 
-* **[-p](https://docs.docker.com/engine/reference/commandline/run/#publish-or-expose-port--p---expose)** Maps Host Port(s) to Container Port(s) [HostPorts:ContainerPorts] Don't recommend changing this value unless you know what you're doing.
+* **[-p](https://docs.docker.com/engine/reference/commandline/run/#publish-or-expose-port--p---expose)** Maps Host Port(s) to Container Port(s) [HostPorts:ContainerPorts]. I don't recommend changing this value unless you know what you're doing inside the container image as well as on the host machine.
 
 * **[-e 'GAME_ID=#######'](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file)** Set the [AppID](https://developer.valvesoftware.com/wiki/Dedicated_Servers_List) that Steamcmd will use to install/update/validate the server files. The correct AppID for Survive The Nights is 1502300.
 
