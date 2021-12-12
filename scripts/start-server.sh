@@ -22,14 +22,14 @@ if [ "${USERNAME}" == "" ]; then
     if [ "${VALIDATE}" == "true" ]; then
     	echo "---Validating installation---"
         ${STEAMCMD_DIR}/steamcmd.sh \
-        +login anonymous \
-        +force_install_dir ${SERVER_DIR} \
+	+force_install_dir ${SERVER_DIR} \
+        +login anonymous \       
         +app_update ${GAME_ID} validate \
         +quit
     else
         ${STEAMCMD_DIR}/steamcmd.sh \
-        +login anonymous \
-        +force_install_dir ${SERVER_DIR} \
+	+force_install_dir ${SERVER_DIR} \
+        +login anonymous \       
         +app_update ${GAME_ID} \
         +quit
     fi
@@ -37,14 +37,14 @@ else
     if [ "${VALIDATE}" == "true" ]; then
     	echo "---Validating installation---"
         ${STEAMCMD_DIR}/steamcmd.sh \
-        +login ${USERNAME} ${PASSWRD} \
-        +force_install_dir ${SERVER_DIR} \
+	+force_install_dir ${SERVER_DIR} \
+        +login ${USERNAME} ${PASSWRD} \        
         +app_update ${GAME_ID} validate \
         +quit
     else
         ${STEAMCMD_DIR}/steamcmd.sh \
-        +login ${USERNAME} ${PASSWRD} \
-        +force_install_dir ${SERVER_DIR} \
+	+force_install_dir ${SERVER_DIR} \
+        +login ${USERNAME} ${PASSWRD} \        
         +app_update ${GAME_ID} \
         +quit
     fi
