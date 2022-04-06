@@ -30,7 +30,7 @@ RUN mkdir $DATA_DIR && \
 	ulimit -n 2048
 
 ADD /scripts/ /opt/scripts/
-RUN chmod -R 774 /opt/scripts/
+RUN chmod -R 775 /opt/scripts/
 
 #Server Start
 ENTRYPOINT ["/opt/scripts/start.sh"]
