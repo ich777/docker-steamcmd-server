@@ -1,8 +1,15 @@
 #!/bin/bash
-echo "---Checking if UID: ${UID} matches user---"
-usermod -u ${UID} ${USER}
-echo "---Checking if GID: ${GID} matches user---"
-usermod -g ${GID} ${USER}
+
+UIDMode="false"
+if [ "$EUID" -eq 0 ]
+  UIDMode="true"
+  echo "---Checking if UID: ${UID} matches user---"
+  usermod -u ${UID} ${USER}
+  echo "---Checking if GID: ${GID} matches user---"
+  groupmod -g ${GID} ${GROUP} 
+  usermod -g ${GID} ${USER}
+fi
+
 echo "---Setting umask to ${UMASK}---"
 umask ${UMASK}
 
@@ -15,11 +22,17 @@ else
 	echo "---No optional script found, continuing---"
 fi
 
-echo "---Starting...---"
-chown -R root:${GID} /opt/scripts
-chmod -R 750 /opt/scripts
-chown -R ${UID}:${GID} ${DATA_DIR}
+echo "---Taking Ownership...---"
+if [ "$UIDMode" == "true" ]
+  chown -R root:${GID} /opt/scripts
+  chmod -R 750 /opt/scripts
+  chown -R ${UID}:${GID} ${DATA_DIR}
+else
+  cp -r /opt/scripts /opt/scripts
+  chmod -R 750 /opt/scripts
+fi
 
+echo "---Starting...---"
 term_handler() {
 	kill -SIGTERM "$killpid"
 	wait "$killpid" -f 2>/dev/null
@@ -27,7 +40,12 @@ term_handler() {
 }
 
 trap 'kill ${!}; term_handler' SIGTERM
-su ${USER} -c "/opt/scripts/start-server.sh" &
+
+if [ "$UIDMode" == "true" ]
+  su ${USER} -c "/opt/scripts/start-server.sh" &
+else
+  /opt/scripts/run/start-server.sh
+fi
 killpid="$!"
 while true
 do
