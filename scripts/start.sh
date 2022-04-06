@@ -27,9 +27,6 @@ if [ "$UIDMode" == "true" ]
   chown -R root:${GID} /opt/scripts
   chmod -R 750 /opt/scripts
   chown -R ${UID}:${GID} ${DATA_DIR}
-else
-  cp -r /opt/scripts /opt/scripts
-  chmod -R 750 /opt/scripts
 fi
 
 echo "---Starting...---"
