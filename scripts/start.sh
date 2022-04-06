@@ -44,7 +44,7 @@ trap 'kill ${!}; term_handler' SIGTERM
 if [ "$UIDMode" == "true" ]
   su ${USER} -c "/opt/scripts/start-server.sh" &
 else
-  /opt/scripts/run/start-server.sh
+  /opt/scripts/run/start-server.sh &
 fi
 killpid="$!"
 while true
