@@ -1,8 +1,8 @@
 #!/bin/bash
 echo "---Ensuring UID: ${UID} matches user---"
-usermod -u ${UID} ${USER}
+usermod -o -u ${UID} ${USER}
 echo "---Ensuring GID: ${GID} matches user---"
-groupmod -g ${GID} ${USER} > /dev/null 2>&1 ||:
+groupmod -o -g ${GID} ${USER} > /dev/null 2>&1 ||:
 usermod -g ${GID} ${USER}
 echo "---Setting umask to ${UMASK}---"
 umask ${UMASK}
