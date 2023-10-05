@@ -141,11 +141,7 @@ fi
 if [ "${ENABLE_BEPINEX}" == "true" ]; then
     echo "---BepInEx for Valheim enabled!---"
     CUR_V="$(find ${SERVER_DIR} -maxdepth 1 -name "BepInEx-*" | cut -d '-' -f2)"
-    LAT_V="$(wget -qO- https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/ | grep -A1 "Changelog" | tail -1 | cut -d '>' -f2 | cut -d '<' -f1)"
-    #Fix for wrong version naming in changelog
-    if [ "${LAT_V}" == "5.4.22" ]; then
-      LAT_V="5.4.2200"
-    fi
+    LAT_V="$(wget -qO- https://valheim.thunderstore.io/api/experimental/package/denikson/BepInExPack_Valheim/ | sed -n 's|.*"version_number":"\([^"]*\)".*|\1|p')"
     if [ -z "${LAT_V}" ] && [ -z "${CUR_V}" ]; then
         echo "---Can't get latest version of BepInEx for Valheim!---"
         echo "---Please try to run the Container without BepInEx for Valheim, putting Container into sleep mode!---"
