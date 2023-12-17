@@ -50,6 +50,11 @@ else
     fi
 fi
 
+if [ "${OXIDE_MOD}" == "true" ] && [ "${CARBON_MOD}" == "true" ]; then
+  echo "Oxide and Carbon mod enabled, you can only enable one at a time, putting container into sleep mode."
+  sleep infinity
+fi
+
 if [ "${OXIDE_MOD}" == "true" ]; then
   echo "---Oxide Mod enabled!---"
   CUR_V="$(find ${SERVER_DIR} -maxdepth 1 -name "OxideMod-*.zip" | cut -d '-' -f2)"
@@ -140,12 +145,11 @@ if [ "${CARBON_MOD}" == "true" ]; then
   if [ "${FORCE_CARBON_INSTALLATION}" == "true" ]; then
     tar -xvf ${SERVER_DIR}/CarbonMod-${LAT_V}.tar.gz -C ${SERVER_DIR}
   fi
-
+  source "${SERVER_DIR}/carbon/tools/environment.sh"
 fi
 
 echo "---Prepare Server---"
 chmod -R ${DATA_PERM} ${DATA_DIR}
-source "${SERVER_DIR}/carbon/tools/environment.sh"
 echo "---Setting Library path---"
 export LD_LIBRARY_PATH=:/bin/RustDedicated_Data/Plugins/x86_64
 echo "---Server ready---"
