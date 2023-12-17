@@ -115,30 +115,30 @@ if [ "${CARBON_MOD}" == "true" ]; then
     echo "---Carbon Mod not found, downloading!---"
     cd ${SERVER_DIR}
     if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${SERVER_DIR}/CarbonMod-${LAT_V}.tar.gz "https://github.com/CarbonCommunity/Carbon/releases/download/${LAT_V}/Carbon.Linux.Release.tar.gz" ; then
-        echo "---Successfully downloaded Carbon Mode v${LAT_V}!---"
+        echo "---Successfully downloaded Carbon Mode ${LAT_V}!---"
     else
-        echo "---Something went wrong, can't download Carbon Mod v${LAT_V}, putting server in sleep mode---"
+        echo "---Something went wrong, can't download Carbon Mod ${LAT_V}, putting server in sleep mode---"
         sleep infinity
     fi
-    tar -xvf ${SERVER_DIR}/CarbonMod-${LAT_V}.tar.gz ${SERVER_DIR}
+    tar -xvf ${SERVER_DIR}/CarbonMod-${LAT_V}.tar.gz -C ${SERVER_DIR}
     #unzip -o ${SERVER_DIR}/CarbonMod-${LAT_V}.zip -d ${SERVER_DIR}
   elif [ "${LAT_V}" != "${CUR_V%.*}" ]; then
     cd ${SERVER_DIR}
     rm -rf ${SERVER_DIR}/CarbonMod-*.tar.gz
-    echo "---Newer version of Carbon Mod v${LAT_V} found, currently installed: v${CUR_V%.*}---"
+    echo "---Newer version of Carbon Mod ${LAT_V} found, currently installed: v${CUR_V%.*}---"
     if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${SERVER_DIR}/CarbonMod-${LAT_V}.tar.gz "https://github.com/CarbonCommunity/Carbon/releases/download/${LAT_V}/Carbon.Linux.Release.tar.gz" ; then
-        echo "---Successfully downloaded Carbon Mod v${LAT_V}!---"
+        echo "---Successfully downloaded Carbon Mod ${LAT_V}!---"
     else
-        echo "---Something went wrong, can't download Carbon Mod v${LAT_V}, putting server in sleep mode---"
+        echo "---Something went wrong, can't download Carbon Mod ${LAT_V}, putting server in sleep mode---"
         sleep infinity
     fi
     tar -xvf ${SERVER_DIR}/CarbonMod-${LAT_V}.tar.gz ${SERVER_DIR}
   elif [ "$LAT_V" == "${CUR_V%.*}" ]; then
-    echo "---Carbon Mod v${CUR_V%.*} is Up-To-Date!---"
+    echo "---Carbon Mod ${CUR_V%.*} is Up-To-Date!---"
   fi
 
   if [ "${FORCE_CARBON_INSTALLATION}" == "true" ]; then
-    tar -xvf ${SERVER_DIR}/CarbonMod-${LAT_V}.tar.gz ${SERVER_DIR}
+    tar -xvf ${SERVER_DIR}/CarbonMod-${LAT_V}.tar.gz -C ${SERVER_DIR}
   fi
 
 fi
