@@ -96,8 +96,56 @@ if [ "${OXIDE_MOD}" == "true" ]; then
 
 fi
 
+if [ "${CARBON_MOD}" == "true" ]; then
+  echo "---Carbon Mod enabled!---"
+  CUR_V="$(find ${SERVER_DIR} -maxdepth 1 -name "Carbon.*.tar.gz" | cut -d '-' -f2)"
+  LAT_V="$(wget -qO- https://api.github.com/repos/CarbonCommunity/Carbon/releases/latest | grep tag_name | cut -d '"' -f4)"
+
+  if [ -z ${LAT_V} ]; then
+    if [ -z ${CUR_V%.*} ]; then
+      echo "---Can't get latest Carbon Mod version and found no installed version, putting server into sleep mode!---"
+      sleep infinity
+    else
+      echo "---Can_t get latest Carbon Mod version, falling back to installed v${CUR_V%.*}!---"
+      LAT_V="${CUR_V%.*}"
+    fi
+  fi
+
+  if [ -z "${CUR_V%.}" ]; then
+    echo "---Carbon Mod not found, downloading!---"
+    cd ${SERVER_DIR}
+    if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${SERVER_DIR}/CarbonMod-${LAT_V}.tar.gz "https://github.com/CarbonCommunity/Carbon/releases/download/${LAT_V}/Carbon.Linux.Release.tar.gz" ; then
+        echo "---Successfully downloaded Carbon Mode v${LAT_V}!---"
+    else
+        echo "---Something went wrong, can't download Carbon Mod v${LAT_V}, putting server in sleep mode---"
+        sleep infinity
+    fi
+    tar -xvf ${SERVER_DIR}/CarbonMod-${LAT_V}.tar.gz ${SERVER_DIR}
+    #unzip -o ${SERVER_DIR}/CarbonMod-${LAT_V}.zip -d ${SERVER_DIR}
+  elif [ "${LAT_V}" != "${CUR_V%.*}" ]; then
+    cd ${SERVER_DIR}
+    rm -rf ${SERVER_DIR}/CarbonMod-*.tar.gz
+    echo "---Newer version of Carbon Mod v${LAT_V} found, currently installed: v${CUR_V%.*}---"
+    if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${SERVER_DIR}/CarbonMod-${LAT_V}.tar.gz "https://github.com/CarbonCommunity/Carbon/releases/download/${LAT_V}/Carbon.Linux.Release.tar.gz" ; then
+        echo "---Successfully downloaded Carbon Mod v${LAT_V}!---"
+    else
+        echo "---Something went wrong, can't download Carbon Mod v${LAT_V}, putting server in sleep mode---"
+        sleep infinity
+    fi
+    tar -xvf ${SERVER_DIR}/CarbonMod-${LAT_V}.tar.gz ${SERVER_DIR}
+  elif [ "$LAT_V" == "${CUR_V%.*}" ]; then
+    echo "---Carbon Mod v${CUR_V%.*} is Up-To-Date!---"
+  fi
+
+  if [ "${FORCE_CARBON_INSTALLATION}" == "true" ]; then
+    tar -xvf ${SERVER_DIR}/CarbonMod-${LAT_V}.tar.gz ${SERVER_DIR}
+  fi
+
+fi
+
 echo "---Prepare Server---"
 chmod -R ${DATA_PERM} ${DATA_DIR}
+source "${SERVER_DIR}/carbon/tools/environment.sh"
 echo "---Setting Library path---"
 export LD_LIBRARY_PATH=:/bin/RustDedicated_Data/Plugins/x86_64
 echo "---Server ready---"
