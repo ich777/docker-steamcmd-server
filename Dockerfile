@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.authors="admin@minenet.at"
 LABEL org.opencontainers.image.source="https://github.com/ich777/docker-steamcmd-server"
 
 RUN apt-get update && \
-	apt-get -y install --no-install-recommends lib32gcc-s1 lib32stdc++6 && \
+	apt-get -y install --no-install-recommends lib32gcc-s1 lib32stdc++6 sqlite3 libsqlite3-0 && \
 	rm -rf /var/lib/apt/lists/*
 
 ENV DATA_DIR="/serverdata"
