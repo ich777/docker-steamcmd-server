@@ -1,7 +1,7 @@
 # SteamCMD in Docker optimized for Unraid
-This Docker will download and install SteamCMD. It will also install Craftopia and run it.
+This Docker will download and install SteamCMD. It will also install Palworld and run it.
 
-Initial Servername: 'Craftopia Docker' Password: '54321'
+Initial Servername: 'Palworld Docker' Password: '54321'
 
 **Update Notice:** Simply restart the container if a newer version of the game is available.
 
@@ -20,20 +20,17 @@ Initial Servername: 'Craftopia Docker' Password: '54321'
 
 ## Run example
 ```
-docker run --name Craftopia -d \
+docker run --name Palworld -d \
 	-p 8787:8787 -p 8787:8787/udp \
 	--env 'GAME_ID=1670340' \
 	--env 'UID=99' \
 	--env 'GID=100' \
 	--volume /path/to/steamcmd:/serverdata/steamcmd \
 	--volume /path/to/craftopia:/serverdata/serverfiles \
-	ich777/steamcmd:craftopia
+	xcyrex/steamcmd:palworld
 ```
 
 This Docker was mainly edited for better use with Unraid, if you don't use Unraid you should definitely try it!
 
 
 This Docker is forked from mattieserver, thank you for this wonderfull Docker.
-
-
-#### Support Thread: https://forums.unraid.net/topic/79530-support-ich777-gameserver-dockers/
