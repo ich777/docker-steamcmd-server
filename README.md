@@ -41,7 +41,7 @@ docker run --name Palworld -d \
 	--env 'GID=100' \
 	--volume /path/to/steamcmd:/serverdata/steamcmd \
 	--volume /path/to/palworld:/serverdata/serverfiles \
-	ich777/steamcmd:asa
+	ich777/steamcmd:palworld
 ```
 
 This Docker was mainly edited for better use with Unraid, if you don't use Unraid you should definitely try it!
