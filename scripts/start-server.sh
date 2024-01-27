@@ -70,7 +70,7 @@ if [ -z "${PUBLIC_IP}" ]; then
     echo "---Can't get PublicIP, please set it manually in your PalWorldSettings.ini!---"
   else
     echo "---Sucessfully obtained PublicIP: ${PUBLIC_IP}, adding to PalWorldSettings.ini"
-    sed -i "s/PublicIP=\"[^\"]*\"/PublicIP=\"${PUBLIC_IP}\"/g" ${SERVER_DIR}/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
+    /opt/scripts/ini-updater.sh "PublicIP" "${PUBLIC_IP}"
   fi
 else
   if [ "${UPDATE_PUBLIC_IP}" == "true" ]; then
@@ -80,7 +80,7 @@ else
     else
       if [ "${PUBLIC_IP}" != "${NEW_PUBLIC_IP}" ]; then
         echo "---Changing PublicIP in PalWorldSettings.ini to: ${NEW_PUBLIC_IP}!---"
-        sed -i "s/PublicIP=\"[^\"]*\"/PublicIP=\"${NEW_PUBLIC_IP}\"/g" ${SERVER_DIR}/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
+        /opt/scripts/ini-updater.sh "PublicIP" "${NEW_PUBLIC_IP}"
       else
         echo "---Nothing to do, PublicIP: ${PUBLIC_IP} still up-to-date!---"
       fi
