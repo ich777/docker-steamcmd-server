@@ -14,16 +14,50 @@ set_ini_value() {
 
     echo "Setting ${key}..."
     sed -i "s|\(${key}=\)[^,]*|\1${value}|g" "${cfgFile}"
-    echo "Set to $(grep -Po "${key}=[^,]*" "${cfgFile}")"
+    echo "Set to $(get_ini_value "$key")"
 }
 
-# Check if two arguments are provided
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 <key> <value>"
+get_ini_value() {
+    local key="${1}"
+
+    # Output only the value of the key
+    grep -Po "(?<=${key}=)[^,]*" "${cfgFile}"
+}
+
+# Check if the number of arguments is valid for both set and get options
+if [ "$#" -lt 1 ] || [ "$#" -gt 3 ]; then
+    echo "Usage:"
+    echo "To set a value: $0 set <key> <value>"
+    echo "To get a value: $0 get <key>"
     exit 1
 fi
 
-# Call set_ini_value with command-line arguments
-set_ini_value "$1" "$2"
+# Check the option provided (set or get)
+option="$1"
+shift
 
-echo "Done!"
+case "$option" in
+    "set")
+        # Check if two arguments are provided for set option
+        if [ "$#" -ne 2 ]; then
+            echo "Usage for set option: $0 set <key> <value>"
+            exit 1
+        fi
+        set_ini_value "$@"
+        ;;
+    "get")
+        # Check if one argument is provided for get option
+        if [ "$#" -ne 1 ]; then
+            echo "Usage for get option: $0 get <key>"
+            exit 1
+        fi
+        get_ini_value "$1"
+        ;;
+    *)
+        echo "Invalid option: $option"
+        echo "Usage:"
+        echo "To set a value: $0 set <key> <value>"
+        echo "To get a value: $0 get <key>"
+        exit 1
+        ;;
+esac

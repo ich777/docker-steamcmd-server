@@ -62,7 +62,7 @@ else
 fi
 
 echo "---Checking if PublicIP is in place---"
-PUBLIC_IP="$(grep -o 'PublicIP="[^"]*"' ${SERVER_DIR}/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini | cut -d '"' -f2)"
+PUBLIC_IP="$(/opt/scripts/ini-updater.sh get "PublicIP")"
 if [ -z "${PUBLIC_IP}" ]; then
   echo "---No PublicIP found in PalWorldSettings.ini, trying to obtain it...---"
   PUBLIC_IP="$(wget -qO - ipv4.icanhazip.com)"
@@ -70,7 +70,7 @@ if [ -z "${PUBLIC_IP}" ]; then
     echo "---Can't get PublicIP, please set it manually in your PalWorldSettings.ini!---"
   else
     echo "---Sucessfully obtained PublicIP: ${PUBLIC_IP}, adding to PalWorldSettings.ini"
-    /opt/scripts/ini-updater.sh "PublicIP" "${PUBLIC_IP}"
+    /opt/scripts/ini-updater.sh set "PublicIP" "${PUBLIC_IP}"
   fi
 else
   if [ "${UPDATE_PUBLIC_IP}" == "true" ]; then
@@ -80,7 +80,7 @@ else
     else
       if [ "${PUBLIC_IP}" != "${NEW_PUBLIC_IP}" ]; then
         echo "---Changing PublicIP in PalWorldSettings.ini to: ${NEW_PUBLIC_IP}!---"
-        /opt/scripts/ini-updater.sh "PublicIP" "${NEW_PUBLIC_IP}"
+        /opt/scripts/ini-updater.sh set "PublicIP" "${NEW_PUBLIC_IP}"
       else
         echo "---Nothing to do, PublicIP: ${PUBLIC_IP} still up-to-date!---"
       fi
