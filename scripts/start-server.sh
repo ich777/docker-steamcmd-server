@@ -122,6 +122,26 @@ else
       echo "Waiting for logs..."
     fi
   done
+  ATTEMPT=0
+  SERVER_READY=1
+  while [ $SERVER_READY -eq 1 ]; do
+    ((ATTEMPT++))
+    if [ $ATTEMPT -eq 16 ]; then
+      echo "Server failed to start within the allocated time!"
+      exit 1
+    fi
+    if [ $ATTEMPT -eq 15 ]; then
+      echo "Server not started after 30 seconds, sleeping for 60 seconds to check again..."
+      sleep 60
+      pidof -q ArkAscendedServer.exe
+      SERVER_READY=$?
+    else
+      echo "Waiting for Ark process to start..."
+      pidof -q ArkAscendedServer.exe
+      SERVER_READY=$?
+      sleep 2
+    fi
+  done
   /opt/scripts/start-watchdog.sh &
   tail -n 9999 -f ${SERVER_DIR}/ShooterGame/Saved/Logs/ShooterGame.log
 fi
