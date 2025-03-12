@@ -73,7 +73,7 @@ else
 fi
 
 echo "---Container under construction!---"
-sleep infinity
+#sleep infinity
 
 echo "---Prepare Server---"
 echo "---Searching for grid files...---"
@@ -126,6 +126,11 @@ fi
 sleep 3
 chmod -R ${DATA_PERM} ${DATA_DIR}
 echo "---Server ready---"
+echo "going to sleep start manualy"
+echo "cd ${SERVER_DIR}/ShooterGame/Binaries/Linux"
+echo "./ShooterGameServer ${MAP_NAME}${GAME_PARAMS} ${GAME_PARAMS_EXTRA}"
+
+sleep infinity
 
 echo "---Start Server---"
 cd ${SERVER_DIR}/ShooterGame/Binaries/Linux
