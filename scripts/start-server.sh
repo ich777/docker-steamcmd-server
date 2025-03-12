@@ -4,7 +4,7 @@ echo "|"
 echo "| This container is deprecated!"
 echo "|"
 echo "+---------------------------------"
-sleep infinity
+#sleep infinity
 
 if [ ! -f ${STEAMCMD_DIR}/steamcmd.sh ]; then
     echo "SteamCMD not found!"
@@ -62,8 +62,8 @@ if [ "${ENA_REDIS}" == "yes" ]; then
 	screen -S RedisServer -d -m /usr/bin/redis-server
 	sleep 5
 else
-	echo "------------------------------------"
-	echo "-----Internal Redis Server not------"
+    echo "------------------------------------"
+    echo "-----Internal Redis Server not------"
     echo "-----enabled, make sure you've------"
     echo "----configured your ATLAS server----"
     echo "--for an external REDIS connection--"
@@ -80,7 +80,7 @@ echo "---Searching for grid files...---"
 if [ ! -f ${SERVER_DIR}/ShooterGame/ServerGrid.jpg ]; then
 	echo "---'ServerGrid.jpg' not found, downloading---"
     cd ${SERVER_DIR}/ShooterGame
-	if wget -q -nc --show-progress --progress=bar:force:noscroll https://raw.githubusercontent.com/ich777/docker-steamcmd-server/atlas/grid/ServerGrid.jpg ; then
+	if wget -q -nc --show-progress --progress=bar:force:noscroll https://raw.githubusercontent.com/CydFSA/docker-steamcmd-server/atlas/grid/ServerGrid.jpg ; then
     	echo "---Sucessfully downloaded 'ServerGrid.jpg'---"
 	else
     	echo "---Can't download 'ServerGrid.jpg', putting server into sleep mode---"
@@ -92,7 +92,7 @@ fi
 if [ ! -f ${SERVER_DIR}/ShooterGame/ServerGrid.json ]; then
 	echo "---'ServerGrid.json' not found, downloading---"
     cd ${SERVER_DIR}/ShooterGame
-	if wget -q -nc --show-progress --progress=bar:force:noscroll https://raw.githubusercontent.com/ich777/docker-steamcmd-server/atlas/grid/ServerGrid.json ; then
+	if wget -q -nc --show-progress --progress=bar:force:noscroll https://raw.githubusercontent.com/CydFSA/docker-steamcmd-server/atlas/grid/ServerGrid.json ; then
     	echo "---Sucessfully downloaded 'ServerGrid.json'---"
 	else
     	echo "---Can't download 'ServerGrid.json', putting server into sleep mode---"
@@ -104,7 +104,7 @@ fi
 if [ ! -f ${SERVER_DIR}/ShooterGame/ServerGrid.ServerOnly.json ]; then
 	echo "---'ServerGrid.ServerOnly.json' not found, downloading---"
     cd ${SERVER_DIR}/ShooterGame
-	if wget -q -nc --show-progress --progress=bar:force:noscroll https://raw.githubusercontent.com/ich777/docker-steamcmd-server/atlas/grid/ServerGrid.ServerOnly.json ; then
+	if wget -q -nc --show-progress --progress=bar:force:noscroll https://raw.githubusercontent.com/CydFSA/docker-steamcmd-server/atlas/grid/ServerGrid.ServerOnly.json ; then
     	echo "---Sucessfully downloaded 'ServerGrid.ServerOnly.json'---"
 	else
     	echo "---Can't download 'ServerGrid.ServerOnly.json', putting server into sleep mode---"
