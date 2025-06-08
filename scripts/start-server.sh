@@ -66,4 +66,4 @@ echo "---Server ready---"
 
 echo "---Start Server---"
 cd ${SERVER_DIR}
-${SERVER_DIR}/DayZServer -port=${GAME_PORT} -profiles ${SERVER_DIR}/saves -config=${SERVER_DIR}/saves/serverDZ.cfg ${GAME_PARAMS}
+${SERVER_DIR}/DayZServer -port=${GAME_PORT} -profiles=${SERVER_DIR}/saves -config=${SERVER_DIR}/saves/serverDZ.cfg ${GAME_PARAMS}
