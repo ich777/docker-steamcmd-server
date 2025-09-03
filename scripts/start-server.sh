@@ -1,9 +1,4 @@
 #!/bin/bash
-echo "+-------------------------------------------------------"
-echo "| This container is now deprecated since the developers"
-echo "| don't support installation through SteamCMD anymore."
-echo "+-------------------------------------------------------"
-sleep infinity
 
 if [ ! -f ${STEAMCMD_DIR}/steamcmd.sh ]; then
     echo "SteamCMD not found!"
