@@ -91,6 +91,7 @@ fi
 if [ ! -f ${SERVER_DIR}/userdata/ownerswhitelist.txt ]; then
     touch ${SERVER_DIR}/userdata/ownerswhitelist.txt
 fi
+echo "1326470" > ${SERVER_DIR}/steam_appid.txt
 
 echo "---Checking for old display lock files---"
 find /tmp -name ".X99*" -exec rm -f {} \; > /dev/null 2>&1
