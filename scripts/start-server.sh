@@ -142,6 +142,19 @@ if [ ! -d ${SERVER_DIR}/WINE64/drive_c/windows ]; then
 else
   echo "---WINE properly set up---"
 fi
+echo "---Checking if UE4 Prerequisites are installed---"
+if [ ! -f ${SERVER_DIR}/WINE64/drive_c/users/steam/UE4_installed ]; then
+  echo "---Installing UE4 Prerequisites, this will take a bit, please wait...---"
+  if [ -f ${SERVER_DIR}/Engine/Extras/Redist/en-us/UE4PrereqSetup_x64.exe ]; then
+    xvfb-run --auto-servernum --server-args='-screen 0 640x480x24:32' wine64 ${SERVER_DIR}/Engine/Extras/Redist/en-us/UE4PrereqSetup_x64.exe /quiet /norestart
+  else
+    echo "---Can't find UE4 Prerequisites, putting container into sleep mode...---"
+    sleep infinity
+  fi
+  touch ${SERVER_DIR}/WINE64/drive_c/users/steam/UE4_installed
+else
+  echo "--UE4 Prerequisites are installed---"
+fi
 echo "---Checking for old display lock files---"
 find /tmp -name ".X99*" -exec rm -f {} \; > /dev/null 2>&1
 chmod -R ${DATA_PERM} ${DATA_DIR}
