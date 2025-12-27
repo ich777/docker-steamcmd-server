@@ -153,7 +153,7 @@ if [ ! -f ${SERVER_DIR}/WINE64/drive_c/users/steam/UE4_installed ]; then
   fi
   touch ${SERVER_DIR}/WINE64/drive_c/users/steam/UE4_installed
 else
-  echo "--UE4 Prerequisites are installed---"
+  echo "---UE4 Prerequisites are installed---"
 fi
 echo "---Checking for old display lock files---"
 find /tmp -name ".X99*" -exec rm -f {} \; > /dev/null 2>&1
