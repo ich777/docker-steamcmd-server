@@ -54,4 +54,5 @@ echo "---Prepare Server---"
 chmod -R ${DATA_PERM} ${DATA_DIR}
 
 echo "---Start Server---"
+dos2unix ${SERVER_DIR}/srcds_run >/dev/null 2>&1
 ${SERVER_DIR}/srcds_run -console -port ${GAME_PORT} ${GAME_PARAMS}
