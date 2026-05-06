@@ -3,9 +3,8 @@ FROM ich777/winehq-baseimage
 LABEL org.opencontainers.image.authors="admin@minenet.at"
 LABEL org.opencontainers.image.source="https://github.com/ich777/docker-steamcmd-server"
 
-RUN dpkg --add-architecture i386 && \
-	apt-get update && \
-	apt-get -y install lib32gcc-s1 screen xvfb winbind && \
+RUN apt-get update && \
+	apt-get -y install lib32gcc-s1 && \
 	rm -rf /var/lib/apt/lists/*
 
 ENV DATA_DIR="/serverdata"
