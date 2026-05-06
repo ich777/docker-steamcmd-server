@@ -17,19 +17,45 @@ else
     +quit
 fi
 
+if [ -d /serverdata/serverfiles/WINE64 ]; then
+  echo "+-----------------------------------------------------------------------------"
+  echo "| UPDATE NOTICE"
+  echo "+-----------------------------------------------------------------------------"
+  echo "| Since Conan Exiles was updated to Unreal Engine 5 you have to transition"
+  echo "| your files over manually:"
+  echo "| 1. Stop the container"
+  echo "| 2. Manually backup your save/config files (eg to your local PC)"
+  echo "|    Location: ../ConanSandbox/Saved (make sure to backup the whole folder)"
+  echo "| 3. In the backed up folder rename \"WindowsServer\" to \"LinuxServer\""
+  echo "|    Location: ../Saved/Config"
+  echo "| 4. Delete all files/folders from the conanexiles directory"
+  echo "| 5. Start the container and wait for it to pull the new gamefiles"
+  echo "|    (open the logs and wait for it to fully start)"
+  echo "| 6. Stop the container again"
+  echo "| 7. Delete the newly created Saved folder and copy over your backed up"
+  echo "|    Saved folder from Step 2"
+  echo "|    Location: ../ConanSandbox/Saved"
+  echo "| 8. Start the container"
+  echo "|"
+  echo "| This container was also converted from running Conan Exiles through WINE"
+  echo "| to native Linux environment."
+  echo "|"
+  echo "|         CONTAINER PUT TO SLEEP MODE - CONTAINER PUT TO SLEEP MODE"
+  echo "+-----------------------------------------------------------------------------"
+  sleep infinity
+fi
+
 echo "---Update Server---"
 if [ "${USERNAME}" == "" ]; then
     if [ "${VALIDATE}" == "true" ]; then
     	echo "---Validating installation---"
         ${STEAMCMD_DIR}/steamcmd.sh \
-        +@sSteamCmdForcePlatformType windows \
         +force_install_dir ${SERVER_DIR} \
         +login anonymous \
         +app_update ${GAME_ID} validate \
         +quit
     else
         ${STEAMCMD_DIR}/steamcmd.sh \
-        +@sSteamCmdForcePlatformType windows \
         +force_install_dir ${SERVER_DIR} \
         +login anonymous \
         +app_update ${GAME_ID} \
@@ -39,14 +65,12 @@ else
     if [ "${VALIDATE}" == "true" ]; then
     	echo "---Validating installation---"
         ${STEAMCMD_DIR}/steamcmd.sh \
-        +@sSteamCmdForcePlatformType windows \
         +force_install_dir ${SERVER_DIR} \
         +login ${USERNAME} ${PASSWRD} \
         +app_update ${GAME_ID} validate \
         +quit
     else
         ${STEAMCMD_DIR}/steamcmd.sh \
-        +@sSteamCmdForcePlatformType windows \
         +force_install_dir ${SERVER_DIR} \
         +login ${USERNAME} ${PASSWRD} \
         +app_update ${GAME_ID} \
@@ -57,7 +81,6 @@ fi
 if [ ! -z "${WS_CONTENT}" ]; then
 	echo "---Installing Workshop Content with ID('s): ${WS_CONTENT}---"
 	${STEAMCMD_DIR}/steamcmd.sh \
-	+@sSteamCmdForcePlatformType windows \
 	+force_install_dir ${SERVER_DIR} \
 	+login anonymous \
 	+workshop_download_item 440900 ${WS_CONTENT// / +workshop_download_item 440900  } \
@@ -87,7 +110,7 @@ fi
 
 echo "---Prepare Server---"
 echo "---Looking for config files---"
-if [ ! -d ${SERVER_DIR}/ConanSandbox/Saved/Config/WindowsServer ]; then
+if [ ! -d ${SERVER_DIR}/ConanSandbox/Saved/Config/LinuxServer ]; then
 	if [ ! -d ${SERVER_DIR}/ConanSandbox ]; then
     	echo "-----------------------------------------------------------"
     	echo "---Something went wrong can't find folder 'ConanSandbox'---"
@@ -100,13 +123,13 @@ if [ ! -d ${SERVER_DIR}/ConanSandbox/Saved/Config/WindowsServer ]; then
 	if [ ! -d ${SERVER_DIR}/ConanSandbox/Saved/Config ]; then
 		mkdir ${SERVER_DIR}/ConanSandbox/Saved/Config
     fi
-    if [ ! -d ${SERVER_DIR}/ConanSandbox/Saved/Config/WindowsServer ]; then
-		mkdir ${SERVER_DIR}/ConanSandbox/Saved/Config/WindowsServer
+    if [ ! -d ${SERVER_DIR}/ConanSandbox/Saved/Config/LinuxServer ]; then
+		mkdir ${SERVER_DIR}/ConanSandbox/Saved/Config/LinuxServer
     fi
 fi
-if [ ! -f ${SERVER_DIR}/ConanSandbox/Saved/Config/WindowsServer/Engine.ini ]; then
+if [ ! -f ${SERVER_DIR}/ConanSandbox/Saved/Config/LinuxServer/Engine.ini ]; then
 	echo "---'Engine.ini' not found, downloading template---"
-    cd ${SERVER_DIR}/ConanSandbox/Saved/Config/WindowsServer
+    cd ${SERVER_DIR}/ConanSandbox/Saved/Config/LinuxServer
 	if wget -q -nc --show-progress --progress=bar:force:noscroll https://raw.githubusercontent.com/ich777/docker-steamcmd-server/conanexiles/config/Engine.ini ; then
 		echo "---Sucessfully downloaded 'Engine.ini'---"
 	else
@@ -116,9 +139,9 @@ if [ ! -f ${SERVER_DIR}/ConanSandbox/Saved/Config/WindowsServer/Engine.ini ]; th
 else
 	echo "---'Engine.ini' found---"
 fi
-if [ ! -f ${SERVER_DIR}/ConanSandbox/Saved/Config/WindowsServer/ServerSettings.ini ]; then
+if [ ! -f ${SERVER_DIR}/ConanSandbox/Saved/Config/LinuxServer/ServerSettings.ini ]; then
 	echo "---'ServerSettings.ini' not found, downloading template---"
-    cd ${SERVER_DIR}/ConanSandbox/Saved/Config/WindowsServer
+    cd ${SERVER_DIR}/ConanSandbox/Saved/Config/LinuxServer
 	if wget -q -nc --show-progress --progress=bar:force:noscroll https://raw.githubusercontent.com/ich777/docker-steamcmd-server/conanexiles/config/ServerSettings.ini ; then
 		echo "---Sucessfully downloaded 'ServerSettings.ini'---"
 	else
@@ -128,37 +151,13 @@ if [ ! -f ${SERVER_DIR}/ConanSandbox/Saved/Config/WindowsServer/ServerSettings.i
 else
 	echo "---'ServerSettings.ini' found---"
 fi
-export WINEARCH=win64
-export WINEPREFIX=/serverdata/serverfiles/WINE64
-export WINEDEBUG=-all
-echo "---Checking if WINE workdirectory is present---"
-if [ ! -d ${SERVER_DIR}/WINE64 ]; then
-	echo "---WINE workdirectory not found, creating please wait...---"
-    mkdir ${SERVER_DIR}/WINE64
-else
-	echo "---WINE workdirectory found---"
-fi
-echo "---Checking if WINE is properly installed---"
-if [ ! -d ${SERVER_DIR}/WINE64/drive_c/windows ]; then
-	echo "---Setting up WINE---"
-    cd ${SERVER_DIR}
-    winecfg > /dev/null 2>&1
-    sleep 15
-else
-	echo "---WINE properly set up---"
-fi
-echo "---Checking for old display lock files---"
-find /tmp -name ".X99*" -exec rm -f {} \; > /dev/null 2>&1
-chmod -R ${DATA_PERM} ${DATA_DIR}
 echo "---Server ready---"
 
 echo "---Start Server---"
 cd ${SERVER_DIR}
-xvfb-run --auto-servernum --server-args='-screen 0 640x480x24:32' wine64 ${SERVER_DIR}/ConanSandboxServer.exe -log ${GAME_PARAMS} >/dev/null 2>&1 &
-sleep 2
-if [ ! -f ${SERVER_DIR}/ConanSandbox/Saved/Logs/ConanSandbox.log ]; then
-  mkdir -p ${SERVER_DIR}/ConanSandbox/Saved/Logs 2>/dev/null
-  touch ${SERVER_DIR}/ConanSandbox/Saved/Logs/ConanSandbox.log 2>/dev/null
+if [ -f "$SERVER_DIR/ConanSandbox/Binaries/Linux/ConanSandboxServer-Linux-Shipping" ]; then
+  $SERVER_DIR/ConanSandbox/Binaries/Linux/ConanSandboxServer-Linux-Shipping ConanSandbox -log ${GAME_PARAMS}
+else
+  echo "---ERROR: Server executable not found!---"
+  sleep infinity
 fi
-/opt/scripts/start-watchdog.sh &
-tail -n +0 -f ${SERVER_DIR}/ConanSandbox/Saved/Logs/ConanSandbox.log
