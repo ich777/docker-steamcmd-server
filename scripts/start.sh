@@ -26,8 +26,10 @@ chown -R ${UID}:${GID} ${DATA_DIR}
 
 echo "---Starting...---"
 term_handler() {
-	kill -SIGINT $(pidof ConanSandboxServer.exe)
-	tail --pid=$(pidof ConanSandboxServer.exe) -f 2>/dev/null
+	kill -SIGINT $(pidof ConanSandboxServer-Linux-Shipping)
+    sleep 3
+    kill -SIGINT $(pidof ConanSandboxServer-Linux-Shipping)
+	tail --pid=$(pidof ConanSandboxServer-Linux-Shipping) -f 2>/dev/null
 	exit 143;
 }
 
