@@ -70,6 +70,11 @@ echo "---Prepare Server---"
 #fi
 #echo "---Savegame location found---"
 
+# Remove EOS Cache
+if [ -d ${DATA_DIR}/.local/share/.eos_sdk ] ; then
+  rm -rf ${DATA_DIR}/.local/share/.eos_sdk
+fi
+
 if [ ! -d ${SERVER_DIR}/User ]; then
     mkdir ${SERVER_DIR}/User
 fi
