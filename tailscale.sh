@@ -128,7 +128,7 @@ if [ ! -z "${TAILSCALE_EXIT_NODE_IP}" ]; then
     TS_PARAMS+=" --exit-node-allow-lan-access"
   fi
 else
-  if [ -z "${TAILSCALE_USERSPACE_NETWORKING}" ] || [ "${TAILSCALE_USERSPACE_NETWORKING}" == "true" ]; then
+  if [ ! -z "${TAILSCALE_USERSPACE_NETWORKING}" ] || [ "${TAILSCALE_USERSPACE_NETWORKING}" == "true" ]; then
     TSD_PARAMS+="-tun=userspace-networking "
   else
     if [ ! -c /dev/net/tun ]; then
