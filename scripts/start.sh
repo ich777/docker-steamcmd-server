@@ -24,11 +24,6 @@ chown -R root:${GID} /opt/scripts
 chmod -R 750 /opt/scripts
 chown -R ${UID}:${GID} ${DATA_DIR}
 
-# Fix for CSDM not working properly
-if [ -f "${SERVER_DIR}/cstrike/addons/sourcemod/gamedata/cssdm.games.txt" ]; then
-  chmod 550 ${SERVER_DIR}/cstrike/addons/sourcemod/gamedata/cssdm.games.txt
-fi
-
 echo "---Starting...---"
 term_handler() {
 	kill -SIGTERM "$killpid"

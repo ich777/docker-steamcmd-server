@@ -60,9 +60,25 @@ if [ ! -f ${DATA_DIR}/.steam/sdk32/steamclient.so ]; then
     fi
     cp -R ${STEAMCMD_DIR}/linux32/* ${DATA_DIR}/.steam/sdk32/
 fi
+
+if [ ! -f ${SERVER_DIR}/RSDragonwilds/Saved/Config/LinuxServer/DedicatedServer.ini ]; then
+    if [ ! -d ${SERVER_DIR}/RSDragonwilds/Saved/Config/LinuxServer ]; then
+        mkdir -p ${SERVER_DIR}/RSDragonwilds/Saved/Config/LinuxServer
+    fi
+    if [ ! -d ${SERVER_DIR}/RSDragonwilds/Saved/SaveGames ]; then
+        mkdir -p ${SERVER_DIR}/RSDragonwilds/Saved/SavedGames
+    fi
+    touch ${SERVER_DIR}/RSDragonwilds/Saved/Config/LinuxServer/DedicatedServer.ini
+    echo -e "OwnerID=\"${OwnerID}\"
+ServerName=\"${SERVERNAME}\"
+DefaultWorldName=\"${DEFAULTWORLDNAME}\"
+AdminPassword=\"${ADMINPASSWORD}\"
+WorldPassword=\"${WORLDPASSWORD}\"" >> ${SERVER_DIR}/RSDragonwilds/Saved/Config/LinuxServer/DedicatedServer.ini
+    fi
+
 chmod -R ${DATA_PERM} ${DATA_DIR}
 echo "---Server ready---"
 
 echo "---Start Server---"
 cd ${SERVER_DIR}
-${SERVER_DIR}/srcds_run -game ${GAME_NAME} ${GAME_PARAMS} -console +port ${GAME_PORT}
+${SERVER_DIR}/RSDragonwildsServer.sh ${GAME_PARAMS} -console +port ${GAME_PORT}
