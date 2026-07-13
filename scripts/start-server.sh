@@ -69,7 +69,9 @@ if [ ! -f ${SERVER_DIR}/RSDragonwilds/Saved/Config/LinuxServer/DedicatedServer.i
         mkdir -p ${SERVER_DIR}/RSDragonwilds/Saved/SavedGames
     fi
     touch ${SERVER_DIR}/RSDragonwilds/Saved/Config/LinuxServer/DedicatedServer.ini
-    echo -e "OwnerID=\"${OwnerID}\"
+    echo -e ";METADATA=(Diff=true, UseCommands=true)
+[/Script/Dominion.DedicatedServerSettings]
+OwnerID=\"${OwnerID}\"
 ServerName=\"${SERVERNAME}\"
 DefaultWorldName=\"${DEFAULTWORLDNAME}\"
 AdminPassword=\"${ADMINPASSWORD}\"
