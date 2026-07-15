@@ -3,7 +3,7 @@ This Docker will download and install SteamCMD. It will also install Runescape: 
 
 **Please see the different Tags/Branches which games are available.**
 
-## Example Env params for CS:Source
+## Example Env params for Runescape: Dragonwilds
 | Name | Value | Example |
 | --- | --- | --- |
 | STEAMCMD_DIR | Folder for SteamCMD | /serverdata/steamcmd |
