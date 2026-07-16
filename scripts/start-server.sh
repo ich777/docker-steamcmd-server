@@ -18,37 +18,59 @@ else
 fi
 
 echo "---Update Server---"
-if [ "${USERNAME}" == "" ]; then
-  if [ "${VALIDATE}" == "true" ]; then
-    echo "---Validating installation---"
-    ${STEAMCMD_DIR}/steamcmd.sh \
-    +force_install_dir ${SERVER_DIR} \
-    +login anonymous \
-    +app_update ${GAME_ID} validate \
-    +quit
+update_server() {
+  if [ "${USERNAME}" == "" ]; then
+    if [ "${VALIDATE}" == "true" ]; then
+      echo "---Validating installation---"
+      ${STEAMCMD_DIR}/steamcmd.sh \
+      +force_install_dir ${SERVER_DIR} \
+      +login anonymous \
+      +app_update ${GAME_ID} validate \
+      +quit
+    else
+      ${STEAMCMD_DIR}/steamcmd.sh \
+      +force_install_dir ${SERVER_DIR} \
+      +login anonymous \
+      +app_update ${GAME_ID} \
+      +quit
+    fi
   else
-    ${STEAMCMD_DIR}/steamcmd.sh \
-    +force_install_dir ${SERVER_DIR} \
-    +login anonymous \
-    +app_update ${GAME_ID} \
-    +quit
+    if [ "${VALIDATE}" == "true" ]; then
+      echo "---Validating installation---"
+      ${STEAMCMD_DIR}/steamcmd.sh \
+      +force_install_dir ${SERVER_DIR} \
+      +login ${USERNAME} ${PASSWRD} \
+      +app_update ${GAME_ID} validate \
+      +quit
+    else
+      ${STEAMCMD_DIR}/steamcmd.sh \
+      +force_install_dir ${SERVER_DIR} \
+      +login ${USERNAME} ${PASSWRD} \
+      +app_update ${GAME_ID} \
+      +quit
+    fi
   fi
-else
-  if [ "${VALIDATE}" == "true" ]; then
-    echo "---Validating installation---"
-    ${STEAMCMD_DIR}/steamcmd.sh \
-    +force_install_dir ${SERVER_DIR} \
-    +login ${USERNAME} ${PASSWRD} \
-    +app_update ${GAME_ID} validate \
-    +quit
-  else
-    ${STEAMCMD_DIR}/steamcmd.sh \
-    +force_install_dir ${SERVER_DIR} \
-    +login ${USERNAME} ${PASSWRD} \
-    +app_update ${GAME_ID} \
-    +quit
+}
+
+# SteamCMD can occasionally leave the local install in a bad state after an
+# update job (commonly surfaced as "Error! App '<id>' state is 0x6 after
+# update job."), which then causes it to silently skip real updates on every
+# subsequent restart. If that happens, clear the local SteamCMD state for
+# this app and retry the update once.
+# GAME_ID may include extra flags (eg. "2394010 -beta branchname"), but
+# SteamCMD only ever prints the bare numeric app ID in its error output.
+APP_ID="$(echo ${GAME_ID} | awk '{print $1}')"
+UPDATE_LOG="$(mktemp)"
+update_server 2>&1 | tee "${UPDATE_LOG}"
+if grep -q "^Error! App '${APP_ID}' state is" "${UPDATE_LOG}"; then
+  echo "---SteamCMD reported a bad state after the update job, clearing local update state and retrying once---"
+  rm -rf ${SERVER_DIR}/steamapps
+  update_server 2>&1 | tee "${UPDATE_LOG}"
+  if grep -q "^Error! App '${APP_ID}' state is" "${UPDATE_LOG}"; then
+    echo "---Retry also failed, continuing with the existing server files - check the SteamCMD output above for details---"
   fi
 fi
+rm -f "${UPDATE_LOG}"
 
 echo "---Checking if configuration is in place---"
 if [ ! -f ${SERVER_DIR}/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini ]; then
