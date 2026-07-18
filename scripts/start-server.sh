@@ -52,6 +52,7 @@ fi
 
 if [ -d "${SERVER_DIR}/steamapps" ] ; then
   if grep -qP '"StateFlags"\s+"6"' ${SERVER_DIR}/steamapps/appmanifest_${GAME_ID}.acf ; then
+    echo "---Update Error detected, retrying...---"
     rm -f ${SERVER_DIR}/steamapps/appmanifest_${GAME_ID}.acf
     if [ "${USERNAME}" == "" ]; then
       ${STEAMCMD_DIR}/steamcmd.sh \
