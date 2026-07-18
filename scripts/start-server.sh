@@ -17,6 +17,12 @@ else
   +quit
 fi
 
+if [ -d "${SERVER_DIR}/steamapps" ] ; then
+  if grep -qP '"StateFlags"\s+"6"' ${SERVER_DIR}/steamapps/appmanifest_*.acf ; then
+    rm -f ${SERVER_DIR}/steamapps/appmanifest_*.acf
+  fi
+fi
+
 echo "---Update Server---"
 if [ "${USERNAME}" == "" ]; then
   if [ "${VALIDATE}" == "true" ]; then
