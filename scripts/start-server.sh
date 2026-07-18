@@ -17,12 +17,6 @@ else
   +quit
 fi
 
-if [ -d "${SERVER_DIR}/steamapps" ] ; then
-  if grep -qP '"StateFlags"\s+"6"' ${SERVER_DIR}/steamapps/appmanifest_*.acf ; then
-    rm -f ${SERVER_DIR}/steamapps/appmanifest_*.acf
-  fi
-fi
-
 echo "---Update Server---"
 if [ "${USERNAME}" == "" ]; then
   if [ "${VALIDATE}" == "true" ]; then
@@ -53,6 +47,25 @@ else
     +login ${USERNAME} ${PASSWRD} \
     +app_update ${GAME_ID} \
     +quit
+  fi
+fi
+
+if [ -d "${SERVER_DIR}/steamapps" ] ; then
+  if grep -qP '"StateFlags"\s+"6"' ${SERVER_DIR}/steamapps/appmanifest_${GAME_ID}.acf ; then
+    rm -f ${SERVER_DIR}/steamapps/appmanifest_${GAME_ID}.acf
+    if [ "${USERNAME}" == "" ]; then
+      ${STEAMCMD_DIR}/steamcmd.sh \
+      +force_install_dir ${SERVER_DIR} \
+      +login anonymous \
+      +app_update ${GAME_ID} \
+      +quit
+    else
+      ${STEAMCMD_DIR}/steamcmd.sh \
+      +force_install_dir ${SERVER_DIR} \
+      +login ${USERNAME} ${PASSWRD} \
+      +app_update ${GAME_ID} \
+      +quit
+    fi
   fi
 fi
 
